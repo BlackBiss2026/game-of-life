@@ -1,0 +1,132 @@
+# Autograding for GitHub Classroom. Generated from tests/grading.txt.
+# Total: 100 points.
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: 'Build (compiles)'
+      id: build
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Build (compiles)'
+        setup-command: ''
+        command: 'make -s build/life'
+        timeout: 2
+        max-score: 5
+    - name: 'No compiler warnings (-Werror)'
+      id: no_warnings
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'No compiler warnings (-Werror)'
+        setup-command: ''
+        command: 'make -s werror'
+        timeout: 2
+        max-score: 5
+    - name: '0 generations prints the same board'
+      id: zero_gens
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: '0 generations prints the same board'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 05_zero_generations'
+        timeout: 2
+        max-score: 5
+    - name: 'Still lifes (block, beehive)'
+      id: still_lifes
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Still lifes (block, beehive)'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 01_still_lifes'
+        timeout: 2
+        max-score: 10
+    - name: 'Blinker (period 2)'
+      id: blinker
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Blinker (period 2)'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 02_blinker_1 03_blinker_2'
+        timeout: 2
+        max-score: 10
+    - name: 'Glider'
+      id: glider
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Glider'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 04_glider'
+        timeout: 2
+        max-score: 10
+    - name: 'Edges: no wrap-around'
+      id: edges
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Edges: no wrap-around'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 06_edges_no_wrap'
+        timeout: 2
+        max-score: 10
+    - name: '1x1 and non-square boards'
+      id: shapes
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: '1x1 and non-square boards'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 07_one_cell 08_non_square'
+        timeout: 2
+        max-score: 10
+    - name: 'Big board (200x300, 400 generations)'
+      id: big
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Big board (200x300, 400 generations)'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh 09_big'
+        timeout: 2
+        max-score: 10
+    - name: 'Errors: bad arguments / bad board files'
+      id: errors
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Errors: bad arguments / bad board files'
+        setup-command: ''
+        command: 'make -s build/life && tests/run_tests.sh errors'
+        timeout: 2
+        max-score: 15
+    - name: 'Memory: no leaks / invalid access (ASan)'
+      id: memory
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Memory: no leaks / invalid access (ASan)'
+        setup-command: ''
+        command: 'make -s build/life_asan && tests/run_tests.sh --asan 01_still_lifes 04_glider 06_edges_no_wrap 07_one_cell 08_non_square errors'
+        timeout: 2
+        max-score: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        BUILD_RESULTS: "${{steps.build.outputs.result}}"
+        NO_WARNINGS_RESULTS: "${{steps.no_warnings.outputs.result}}"
+        ZERO_GENS_RESULTS: "${{steps.zero_gens.outputs.result}}"
+        STILL_LIFES_RESULTS: "${{steps.still_lifes.outputs.result}}"
+        BLINKER_RESULTS: "${{steps.blinker.outputs.result}}"
+        GLIDER_RESULTS: "${{steps.glider.outputs.result}}"
+        EDGES_RESULTS: "${{steps.edges.outputs.result}}"
+        SHAPES_RESULTS: "${{steps.shapes.outputs.result}}"
+        BIG_RESULTS: "${{steps.big.outputs.result}}"
+        ERRORS_RESULTS: "${{steps.errors.outputs.result}}"
+        MEMORY_RESULTS: "${{steps.memory.outputs.result}}"
+      with:
+        runners: build,no_warnings,zero_gens,still_lifes,blinker,glider,edges,shapes,big,errors,memory

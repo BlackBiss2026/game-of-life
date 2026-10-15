@@ -1,0 +1,12 @@
+# id | display name | points | command
+build          | Build (compiles)                          | 5  | make -s build/life
+no_warnings    | No compiler warnings (-Werror)            | 5  | make -s werror
+zero_gens      | 0 generations prints the same board       | 5  | make -s build/life && tests/run_tests.sh 05_zero_generations
+still_lifes    | Still lifes (block, beehive)              | 10 | make -s build/life && tests/run_tests.sh 01_still_lifes
+blinker        | Blinker (period 2)                        | 10 | make -s build/life && tests/run_tests.sh 02_blinker_1 03_blinker_2
+glider         | Glider                                    | 10 | make -s build/life && tests/run_tests.sh 04_glider
+edges          | Edges: no wrap-around                     | 10 | make -s build/life && tests/run_tests.sh 06_edges_no_wrap
+shapes         | 1x1 and non-square boards                 | 10 | make -s build/life && tests/run_tests.sh 07_one_cell 08_non_square
+big            | Big board (200x300, 400 generations)      | 10 | make -s build/life && tests/run_tests.sh 09_big
+errors         | Errors: bad arguments / bad board files   | 15 | make -s build/life && tests/run_tests.sh errors
+memory         | Memory: no leaks / invalid access (ASan)  | 10 | make -s build/life_asan && tests/run_tests.sh --asan 01_still_lifes 04_glider 06_edges_no_wrap 07_one_cell 08_non_square errors
