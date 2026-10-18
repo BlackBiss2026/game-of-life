@@ -82,7 +82,7 @@ tests/run_tests.sh 04_glider   # בדיקה אחת
 2. בראש העמוד הזה לחצו על הכפתור הירוק **Use this template** ← **Create a new repository**.
 3. מלאו:
    - **Owner:** `BlackBiss2026` (לא החשבון הפרטי שלכם!)
-   - **Repository name:** `game-of-life-<שם המשתמש שלכם בגיטהאב>`, למשל `game-of-life-dana-cohen`
+   - **Repository name:** כל שם שתרצו, למשל `game-of-life`
    - **Private**
 4. `git clone` למאגר החדש, ועובדים בו.
 
